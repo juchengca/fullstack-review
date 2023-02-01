@@ -9,6 +9,17 @@ const App = () => {
   const [repos, setRepos] = useState([]);
 
   const search = (term) => {
+
+    $.ajax({
+      url:'http://localhost:1128/repos',
+      type:"POST",
+      data:JSON.stringify({'username':term}),
+      contentType:"application/json; charset=utf-8",
+      success: (response) => {
+        console.log('ajax post success: ', response);
+      }
+    })
+
     console.log(`${term} was searched`);
   }
 
