@@ -2,6 +2,7 @@ const express = require('express');
 let app = express();
 const cors = require('cors')
 var getRepos = require('../helpers/github.js');
+var saveRepos = require('../database/index.js');
 
 app.use(cors());
 app.use(express.json());
@@ -16,12 +17,39 @@ app.get('/', (req, res) => {
 });
 
 app.post('/repos', function (req, res) {
-  console.log('req: ', req.body);
+
   getRepos.getReposByUsername(req.body.username, (repos) => {
-    console.log(repos);
+    // read all urls from database to check for duplicates
+    var allURLS = [];
+    saveRepos.read((allRepos) => {
+      for (var j = 0; j < allRepos.length; j++) {
+        allURLS.push(allRepos[j].url);
+      }
+      var userRepos = [];
+      var tempObj = {};
+      // add new repo objects to array to be written if not already in database
+      for (var i = 0; i < repos.length; i++) {
+        if (!allURLS.includes(repos[i].html_url)) {
+          tempObj.id = repos[i].id;
+          tempObj.name = repos[i].name;
+          tempObj.stargazers = repos[i].stargazers_count;
+          tempObj.url = repos[i].html_url;
+          userRepos.push(tempObj);
+          tempObj = {};
+        }
+      }
+      // if new repo array is not empty, write to database
+      if (userRepos.length > 0) {
+        saveRepos.save(userRepos, () => {
+          console.log('Success: user repo written to database');
+        });
+      } else {
+        console.log('Repo already in database')
+      }
+    })
   });
 
-  res.send('success');
+  res.send();
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
