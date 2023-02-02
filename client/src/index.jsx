@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 
 const App = () => {
+
+  //const [repos, setRepos] = useState([]);
+
+  const getInitial = (callback) => {
+    $.ajax({
+      url:'http://localhost:1128/repos',
+      type:"GET",
+      data:'json',
+      //contentType:"application/json; charset=utf-8",
+      success: (response) => {
+        //console.log('ajax get success: ', response);
+        callback(response);
+      }
+    })
+  };
+
+  useEffect(() => {
+    getInitial((res) => {
+        setRepos(res);
+    })
+  }, []);
 
   const [repos, setRepos] = useState([]);
 
@@ -19,9 +40,10 @@ const App = () => {
         console.log('ajax post success: ', response);
       }
     })
-
     console.log(`${term} was searched`);
   }
+
+
 
   return (
     <div>

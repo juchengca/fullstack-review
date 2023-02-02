@@ -60,7 +60,17 @@ app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
 
-  res.send('hello');
+  var repos = [];
+  var top25 = [];
+  saveRepos.read((allRepos) => {
+    repos = allRepos.sort((a, b) => b.stargazers - a.stargazers);
+    for (var i = 0; i < repos.length; i++) {
+      if (i < 25) {
+        top25.push(repos[i]);
+      }
+    }
+    res.send(top25);
+  })
 
 });
 
