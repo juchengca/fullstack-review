@@ -13,8 +13,7 @@ const RepoList = ({ repos }) => {
   return (
     //<h4> Repo List Component </h4>
 
-    <div><h4>Here are your top 25 repos in order of stargazers: </h4>
-
+    <div><h4>{repos.length ? 'Here are your top 25 repos in order of stargazers: ' : 'Add more repos!'}  </h4>
     <ol>{
     repos.map((repo) => <li style={{marginBottom: 20, marginLeft: 0}} key={repo.id}>
       <div>Name: <a style={{color: 'skyblue'}} href={repo.url}>{repo.name}</a></div>
@@ -22,15 +21,6 @@ const RepoList = ({ repos }) => {
       </li>)}
     </ol>
     </div>
-
-    // <div>
-    //   <h4> Repo List Component </h4>
-    //   There are {repos.length} repos.
-    //     <div>
-    //     Here are your top 25 repos:
-    //       <ol>{listRepos.name} {console.log(listRepos.name)}</ol>
-    //   </div>
-    // </div>
 
   )
 
