@@ -43,7 +43,8 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div style={{color: 'white', fontFamily: 'Helvetica', margin: '50px' }}>
+      <style>{'body { background-color: rgba(40, 40, 40, 1.0); }'}</style>
       <h1>Github Fetcher</h1>
       <Search onSearch={search}/>
       <RepoList repos={repos}/>
