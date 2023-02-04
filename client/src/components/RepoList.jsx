@@ -13,9 +13,8 @@ const RepoList = ({ repos }) => {
   return (
     //<h4> Repo List Component </h4>
     <ol>{
-    repos.map((repo) => <li key={repo.id}>
-      <div>Name: {repo.name}</div>
-      <div>URL: {repo.url}</div>
+    repos.map((repo) => <li style={{marginBottom: 10}} key={repo.id}>
+      <div>Name: <a href={repo.url}>{repo.name}</a></div>
       <div>Stargazers: {repo.stargazers}</div>
       </li>)}
     </ol>

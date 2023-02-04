@@ -6,28 +6,25 @@ import RepoList from './components/RepoList.jsx';
 
 const App = () => {
 
-  //const [repos, setRepos] = useState([]);
+  const [repos, setRepos] = useState([]);
 
-  const getInitial = (callback) => {
+  const getRepos = (callback) => {
     $.ajax({
       url:'http://localhost:1128/repos',
       type:"GET",
       data:'json',
       //contentType:"application/json; charset=utf-8",
       success: (response) => {
-        //console.log('ajax get success: ', response);
         callback(response);
       }
     })
   };
 
   useEffect(() => {
-    getInitial((res) => {
+    getRepos((res) => {
         setRepos(res);
     })
   }, []);
-
-  const [repos, setRepos] = useState([]);
 
   const search = (term) => {
 
@@ -37,13 +34,13 @@ const App = () => {
       data:JSON.stringify({'username':term}),
       contentType:"application/json; charset=utf-8",
       success: (response) => {
-        console.log('ajax post success: ', response);
+        getRepos((res) => {
+          setRepos(res);
+        })
       }
     })
     console.log(`${term} was searched`);
   }
-
-
 
   return (
     <div>

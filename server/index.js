@@ -1,20 +1,17 @@
 const express = require('express');
 let app = express();
-const cors = require('cors')
 var getRepos = require('../helpers/github.js');
 var saveRepos = require('../database/index.js');
 
-app.use(cors());
 app.use(express.json());
+//app.use(express.static('../client/dist'));
+app.use(express.static(__dirname + '/../client/dist')); // html file
 
 // TODO - your code here!
 // Set up static file service for files in the `client/dist` directory.
 // Webpack is configured to generate files in that directory and
 // this server must serve those files when requested.
 
-app.get('/', (req, res) => {
-  res.send('get /');
-});
 
 app.post('/repos', function (req, res) {
 
@@ -42,14 +39,15 @@ app.post('/repos', function (req, res) {
       if (userRepos.length > 0) {
         saveRepos.save(userRepos, () => {
           console.log('Success: user repo written to database');
+          res.send();
         });
       } else {
         console.log('Repo already in database')
+        res.send();
       }
     })
   });
 
-  res.send();
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
